@@ -1,0 +1,67 @@
+service: card-tokenizer-api
+
+frameworkVersion: "3"
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-dynamodb-local
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:DescribeTable
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:BatchWriteItem
+          Resource: "arn:aws:dynamodb:us-east-2:*:table/credit-card-table"
+functions:
+  tokenizer-credit-card:
+    handler: src/lambdas/tokenizer.handler
+    description: "Tokenizador de tarjetas de credito"
+    events:
+      - http:
+          path: /tokens
+          method: post
+
+  retrieve-credit-card:
+    handler: src/lambdas/retrieve.handler
+    description: "Obtiene los datos de la tarjetas de credito a traves de un token"
+    events:
+      - http:
+          path: /token
+          method: get         
+
+custom:
+  dynamodb:
+    start:
+      port: 5000
+      inMemory: true
+      migrate: true
+      onStart: true
+    stages: "dev"
+
+resources:
+  Resources:
+    CreditCardTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: credit-card-table
+        AttributeDefinitions:
+          - AttributeName: token
+            AttributeType: S
+        KeySchema:
+          - AttributeName: token
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
