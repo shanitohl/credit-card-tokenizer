@@ -6,6 +6,7 @@ import CreditCardRepository from "../../../domain/repositories/credit-card.repos
 import { addMinutes } from "../../../utils/date";
 import { luhnCheck } from "../../../utils/luhm-algorithm";
 import { ramdon } from "../../../utils/token";
+import { BadRequestError } from "../../service/custom-error";
 import { TokenizeCreditCardRequest } from "./dto/tokenize-credit-card.request";
 
 export class TokenizeCreditCardUseCase {
@@ -14,8 +15,8 @@ export class TokenizeCreditCardUseCase {
   async execute(creditCardRequest: TokenizeCreditCardRequest): Promise<string> {
     const isValid = await luhnCheck(creditCardRequest.card_number.toString());
     if (!isValid)
-      throw new Error(
-        "no cumple con los requisitos minimos para el numero de tarjeta de credito"
+      throw new BadRequestError(
+        "No cumple con los requisitos minimos para el numero de tarjeta de credito"
       );
 
     const token = ramdon();

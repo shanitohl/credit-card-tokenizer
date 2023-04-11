@@ -8,7 +8,7 @@ export default class DynamoDbCreditCard implements CreditCardRepository {
 
   constructor() {}
 
-  async save(entity: TokenizedEntity): Promise<TokenizedEntity> {
+  async save(entity: TokenizedEntity): Promise<TokenizedEntity | undefined> {
     console.log("after create dynamobcliente", entity);
     await this.docClient
       .put({
@@ -29,7 +29,7 @@ export default class DynamoDbCreditCard implements CreditCardRepository {
       })
       .promise();
     if (!result.Item) {
-      throw new Error("Id does not exit");
+      return undefined; // throw new Error("Id does not exit");
     }
     return result.Item as TokenizedEntity;
   }

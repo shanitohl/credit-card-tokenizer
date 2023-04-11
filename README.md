@@ -24,6 +24,10 @@ Run app
 
 - npm run start
 
+Run test
+
+- npm run test
+
 Deploy app
 
 - npm run deploy:dev
