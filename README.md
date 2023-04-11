@@ -28,6 +28,9 @@ Run test
 
 - npm run test
 
+Run Linter
+- npm run lint 
+
 Deploy app
 
 - npm run deploy:dev
