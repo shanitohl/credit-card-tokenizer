@@ -2,6 +2,8 @@ service: card-tokenizer-api
 
 frameworkVersion: "3"
 
+useDotenv: true
+
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
@@ -10,6 +12,8 @@ plugins:
 provider:
   name: aws
   runtime: nodejs16.x
+  environment:
+    CREDIT_TABLE_TABLE: ${self:custom.CreditCardTableName}
   iam:
     role:
       statements:
@@ -23,7 +27,10 @@ provider:
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
             - dynamodb:BatchWriteItem
-          Resource: "arn:aws:dynamodb:us-east-2:*:table/credit-card-table"
+          Resource: 
+            - !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${self:custom.CreditCardTableName}*'
+          #  "arn:aws:dynamodb:us-east-2:*:table/credit-card-table"
+          # Resource: "arn:aws:dynamodb:us-east-2:*:table/credit-card-table"
 functions:
   tokenizer-credit-card:
     handler: src/lambdas/tokenizer.handler
@@ -42,6 +49,7 @@ functions:
           method: get         
 
 custom:
+  CreditCardTableName: ${opt:tableName, self:service}-credit-card-table
   dynamodb:
     start:
       port: 5000
@@ -55,7 +63,7 @@ resources:
     CreditCardTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: credit-card-table
+        TableName: ${self:custom.CreditCardTableName}
         AttributeDefinitions:
           - AttributeName: token
             AttributeType: S

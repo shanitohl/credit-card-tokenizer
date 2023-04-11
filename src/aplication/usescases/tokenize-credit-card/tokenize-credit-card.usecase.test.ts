@@ -14,7 +14,6 @@ describe("TokenizeCreditCardUseCase", () => {
   });
 
   test("should save an entity", async () => {
-    const token = "Nd8StBTQdQW3ySA1";
     const entity: Partial<TokenizeCreditCardRequest> = {
       email: "shanohl.sist@gmail.com",
       card_number: 4111111111111111,
@@ -22,8 +21,6 @@ describe("TokenizeCreditCardUseCase", () => {
       expiration_year: "2023",
       expiration_month: "12",
     };
-
-    // creditCardRepository.save.mockResolvedValue(entity);
     const result = await useCase.execute(entity);
     expect(typeof result).toBe("string");
   });

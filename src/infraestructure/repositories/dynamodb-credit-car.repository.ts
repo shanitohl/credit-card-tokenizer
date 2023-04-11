@@ -3,12 +3,13 @@ import { TokenizedEntity } from "../../domain/entities/credit-card.entity";
 import CreditCardRepository from "../../domain/repositories/credit-card.repository";
 
 export default class DynamoDbCreditCard implements CreditCardRepository {
-  private tableName: string = "credit-card-table"; //creditCardTable;
+  // private tableName: string = process.env.CREDIT_TABLE_TABLE ?? "credit-card-table"; //creditCardTable;
+
+  constructor(private readonly tableName: string = process.env.CREDIT_TABLE_TABLE) {}
+
   private docClient = dynamoDBClient();
 
-  constructor() {}
-
-  async save(entity: TokenizedEntity): Promise<TokenizedEntity | undefined> {
+  async save(entity: TokenizedEntity): Promise<TokenizedEntity> {
     console.log("after create dynamobcliente", entity);
     await this.docClient
       .put({
@@ -16,10 +17,10 @@ export default class DynamoDbCreditCard implements CreditCardRepository {
         Item: entity,
       })
       .promise();
-    return entity as TokenizedEntity;
+    return entity;
   }
 
-  async getById(id: string): Promise<TokenizedEntity> {
+  async getById(id: string): Promise<TokenizedEntity | undefined> {
     const result = await this.docClient
       .get({
         TableName: this.tableName,

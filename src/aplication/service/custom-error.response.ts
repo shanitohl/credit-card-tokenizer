@@ -1,6 +1,9 @@
 import { APIGatewayProxyResult } from "aws-lambda";
-import { formatJSONResponse } from "../../adapters/api-gateway";
-import { BadRequestError, NotFoundError, UnauthorizedError } from "./custom-error";
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from "./custom-error";
 
 export const handleErrors = (error: Error): APIGatewayProxyResult => {
   // console.error(error);

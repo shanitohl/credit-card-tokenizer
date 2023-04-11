@@ -1,9 +1,4 @@
-// import { TokenizedEntity } from "../../../core/entities/credit-card.entity";
-// import { addMinutes } from "../../../common/helpers/date";
-// import retrieveCreditCard from "../retrieve-card.usecase";
-
 import { addMinutes } from "../../../utils/date";
-import { TokenizeCreditCardRequest } from "../tokenize-credit-card";
 import { RetrieveCreditCardUseCase } from "./retrieve-credit-card.usecase";
 
 describe("RetrieveCreditCardUseCase", () => {
@@ -15,9 +10,7 @@ describe("RetrieveCreditCardUseCase", () => {
       getById: jest.fn(),
       save: jest.fn(),
     };
-    // useCase = tokenizerCreditCard(creditCardRepository);
     useCase = new RetrieveCreditCardUseCase(creditCardRepository);
-    // useCase = new MyUseCase(repository);
   });
 
   test("should get an entity by id", async () => {
@@ -38,6 +31,5 @@ describe("RetrieveCreditCardUseCase", () => {
     creditCardRepository.getById.mockResolvedValue(entity);
     const result = await useCase.execute(token);
     expect(result).toEqual(entity.credit_card);
-    // expect(creditCardRepository.getById).toHaveBeenCalledWith(entity.credit_card);
   });
 });
