@@ -17,6 +17,7 @@ export class RetrieveCreditCardUseCase {
     if (expirationDate < new Date())
       throw new BadRequestError("El token ha expirado");
 
-    return tokenizedEntity.credit_card;
+    const { cvv, ...creditCard } = tokenizedEntity.credit_card;
+    return creditCard;
   }
 }

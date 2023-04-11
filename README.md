@@ -36,6 +36,21 @@ Remove Deploy
 
 - npm run remove:dev
 
+### Test api
+
+- Tokenizer credit card test
+  POST: http://localhost:3000/dev/tokens
+    body: {
+      "email": "shanohl.sist@gmail.com",
+      "card_number": 4111111111111111,
+      "cvv": 1234,
+      "expiration_year": "2023",
+      "expiration_month": "12"
+  }
+
+- Retrieve credit card details
+  GET: http://localhost:3000/dev/token?token=8qpfhSQGIqzOZwXl
+
 ### Fix compoment
 
 https://s3.us-west-2.amazonaws.com/dynamodb-local/dynamodb_local_latest.tar.gz
